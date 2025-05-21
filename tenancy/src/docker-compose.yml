@@ -1,0 +1,66 @@
+version: '3.4'
+services:
+  tenancy.api:
+    image: ${DOCKER_REGISTRY-}tenancyapi
+    build:
+      context: .
+      dockerfile: Tenancy.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__TenantDb=Host=tenant.db;Database=tenantdb;Username=postgres;Password=postgres
+      - ConnectionStrings__SharedAppDb=Host=shared.db;Database=shareddb;Username=postgres;Password=postgres
+      - ConnectionStrings__IsolatedAppDb=Host=isolated.db;Database=isolateddb;Username=postgres;Password=postgres
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    depends_on:
+      - tenant.db
+      - shared.db
+      - isolated.db
+
+  tenant.db:
+    image: postgres:latest
+    container_name: Tenant.DB
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tenantdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - tenant-data:/var/lib/postgresql/data
+
+  shared.db:
+    image: postgres:latest
+    container_name: Shared.DB
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=shareddb
+    ports:
+      - "5433:5432"
+    volumes:
+      - shared-data:/var/lib/postgresql/data
+
+  isolated.db:
+    image: postgres:latest
+    container_name: Isolated.DB
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=isolateddb
+    ports:
+      - "5434:5432"
+    volumes:
+      - isolated-data:/var/lib/postgresql/data
+
+volumes:
+  tenant-data:
+  shared-data:
+  isolated-data:  

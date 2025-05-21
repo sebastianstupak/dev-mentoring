@@ -1,2 +1,7 @@
-# dev-mentoring
-Supplemental material for developer mentoring
+# DEV Mentoring
+
+Supplemental material for developer mentoring sessions at work.
+
+## Sessions
+
+[Tenancy](./tenancy/README.md)
