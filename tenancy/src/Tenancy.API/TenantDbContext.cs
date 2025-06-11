@@ -1,6 +1,5 @@
 ﻿using Finbuckle.MultiTenant.EntityFrameworkCore.Stores.EFCoreStore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Tenancy.API.Model;
 
 namespace Tenancy.API;

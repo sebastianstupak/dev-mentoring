@@ -22,7 +22,7 @@ Sessions in no particular order, sessions are decided by what the team is workin
   - Grafana
   - Kibana/Elasticsearch
     - Running analysis on logs
-- Design architecture and patters
+- Design architecture and patterns
   - CQRS
   - Vertical slices
   - Event sourcing
